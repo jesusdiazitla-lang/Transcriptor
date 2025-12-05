@@ -1,0 +1,22 @@
+# =============================
+# DEPENDENCIAS DEL TRANSCRIPTOR DE AUDIO
+# =============================
+
+# OpenAI API - Para transcripción con Whisper
+openai>=1.0.0
+
+# Python Dotenv - Para manejo de variables de entorno (.env)
+python-dotenv>=1.0.0
+
+# Cryptography - Para encriptación de texto con Fernet
+cryptography>=41.0.0
+
+# =============================
+# NOTAS:
+# =============================
+# - Tkinter viene incluido con Python (no requiere instalación)
+# - Para instalar todas las dependencias ejecuta:
+#   pip install -r requirements.txt
+# 
+# - Para crear/actualizar este archivo con tus versiones exactas:
+#   pip freeze > requirements.txt
