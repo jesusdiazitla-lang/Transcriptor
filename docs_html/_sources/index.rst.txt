@@ -1,0 +1,119 @@
+.. Transcriptor de Audio documentation master file
+
+===========================================
+Transcriptor de Audio - Documentación
+===========================================
+
+Bienvenido a la documentación del **Transcriptor de Audio**, una aplicación de escritorio
+para transcribir archivos de audio a texto usando la API de Whisper de OpenAI.
+
+.. image:: https://img.shields.io/badge/Python-3.7%2B-blue
+   :alt: Python Version
+
+.. image:: https://img.shields.io/badge/License-MIT-green
+   :alt: License
+
+Características Principales
+============================
+
+* 🎵 **Transcripción de audio** usando Whisper API de OpenAI
+* 📄 **Vista RAW** del contenido binario del archivo
+* 🔐 **Encriptación** de texto con algoritmo Fernet (AES-128)
+* 🎨 **Interfaz moderna** con tema oscuro
+* ⚡ **Procesamiento asíncrono** sin bloquear la UI
+
+Inicio Rápido
+=============
+
+Instalación
+-----------
+
+.. code-block:: bash
+
+   git clone https://github.com/jesusdiazitla-lang/Transcriptor.git
+   cd Transcriptor
+   pip install -r requirements.txt
+
+Configuración
+-------------
+
+Crea un archivo ``.env`` en la raíz del proyecto:
+
+.. code-block:: bash
+
+   OPENAI_API_KEY=tu_clave_api_aqui
+
+Uso
+---
+
+.. code-block:: bash
+
+   python transcriptor_gui.py
+
+Contenido
+=========
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Documentación:
+
+   installation
+   usage
+   api
+   modules
+
+Documentación de la API
+========================
+
+.. automodule:: transcriptor_gui
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Funciones Principales
+=====================
+
+Encriptación
+------------
+
+.. autofunction:: transcriptor_gui.encrypt_text
+
+Selección de Archivo
+--------------------
+
+.. autofunction:: transcriptor_gui.seleccionar_archivo
+
+Transcripción
+-------------
+
+.. autofunction:: transcriptor_gui.transcribir
+
+Encriptar Texto
+---------------
+
+.. autofunction:: transcriptor_gui.encriptar
+
+Índices y Tablas
+================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+Licencia
+========
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo LICENSE para más detalles.
+
+Autor
+=====
+
+**Jesús Díaz**
+
+* GitHub: `@jesusdiazitla-lang <https://github.com/jesusdiazitla-lang>`_
+
+Contacto
+========
+
+Para reportar bugs o solicitar nuevas características, visita:
+https://github.com/jesusdiazitla-lang/Transcriptor/issues

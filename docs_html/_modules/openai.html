@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>openai &mdash; Transcriptor de Audio v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=36c4ab74"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Transcriptor de Audio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transcriptor de Audio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">openai</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para openai</h1><div class="highlight"><pre>
+<span></span><span class="c1"># File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_t</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">NOT_GIVEN</span><span class="p">,</span> <span class="n">Omit</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,</span> <span class="n">NotGiven</span><span class="p">,</span> <span class="n">Transport</span><span class="p">,</span> <span class="n">ProxiesTypes</span><span class="p">,</span> <span class="n">omit</span><span class="p">,</span> <span class="n">not_given</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_from_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">OpenAI</span><span class="p">,</span> <span class="n">Stream</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">Transport</span><span class="p">,</span> <span class="n">AsyncClient</span><span class="p">,</span> <span class="n">AsyncOpenAI</span><span class="p">,</span> <span class="n">AsyncStream</span><span class="p">,</span> <span class="n">RequestOptions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__title__</span><span class="p">,</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._response</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIResponse</span> <span class="k">as</span> <span class="n">APIResponse</span><span class="p">,</span> <span class="n">AsyncAPIResponse</span> <span class="k">as</span> <span class="n">AsyncAPIResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">,</span> <span class="n">DEFAULT_MAX_RETRIES</span><span class="p">,</span> <span class="n">DEFAULT_CONNECTION_LIMITS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">APIError</span><span class="p">,</span>
+    <span class="n">OpenAIError</span><span class="p">,</span>
+    <span class="n">ConflictError</span><span class="p">,</span>
+    <span class="n">NotFoundError</span><span class="p">,</span>
+    <span class="n">APIStatusError</span><span class="p">,</span>
+    <span class="n">RateLimitError</span><span class="p">,</span>
+    <span class="n">APITimeoutError</span><span class="p">,</span>
+    <span class="n">BadRequestError</span><span class="p">,</span>
+    <span class="n">APIConnectionError</span><span class="p">,</span>
+    <span class="n">AuthenticationError</span><span class="p">,</span>
+    <span class="n">InternalServerError</span><span class="p">,</span>
+    <span class="n">PermissionDeniedError</span><span class="p">,</span>
+    <span class="n">LengthFinishReasonError</span><span class="p">,</span>
+    <span class="n">UnprocessableEntityError</span><span class="p">,</span>
+    <span class="n">APIResponseValidationError</span><span class="p">,</span>
+    <span class="n">InvalidWebhookSignatureError</span><span class="p">,</span>
+    <span class="n">ContentFilterFinishReasonError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._base_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultHttpxClient</span><span class="p">,</span> <span class="n">DefaultAioHttpClient</span><span class="p">,</span> <span class="n">DefaultAsyncHttpxClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._utils._logs</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span> <span class="k">as</span> <span class="n">_setup_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._legacy_response</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpxBinaryResponseContent</span> <span class="k">as</span> <span class="n">HttpxBinaryResponseContent</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;types&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__version__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__title__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NoneType&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Transport&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ProxiesTypes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NotGiven&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NOT_GIVEN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;not_given&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;omit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;OpenAIError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APIError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APIStatusError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APITimeoutError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APIConnectionError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APIResponseValidationError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BadRequestError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AuthenticationError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PermissionDeniedError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NotFoundError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ConflictError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UnprocessableEntityError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RateLimitError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;InternalServerError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LengthFinishReasonError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ContentFilterFinishReasonError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;InvalidWebhookSignatureError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Timeout&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RequestOptions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Client&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AsyncClient&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Stream&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AsyncStream&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;OpenAI&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AsyncOpenAI&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_from_path&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BaseModel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_TIMEOUT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_MAX_RETRIES&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_CONNECTION_LIMITS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DefaultHttpxClient&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DefaultAsyncHttpxClient&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DefaultAioHttpClient&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_t</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._utils._resources_proxy</span><span class="w"> </span><span class="kn">import</span> <span class="n">resources</span> <span class="k">as</span> <span class="n">resources</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">azure</span> <span class="k">as</span> <span class="n">_azure</span><span class="p">,</span> <span class="n">pydantic_function_tool</span> <span class="k">as</span> <span class="n">pydantic_function_tool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">VERSION</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.lib.azure</span><span class="w"> </span><span class="kn">import</span> <span class="n">AzureOpenAI</span> <span class="k">as</span> <span class="n">AzureOpenAI</span><span class="p">,</span> <span class="n">AsyncAzureOpenAI</span> <span class="k">as</span> <span class="n">AsyncAzureOpenAI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.lib._old_api</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.lib.streaming</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AssistantEventHandler</span> <span class="k">as</span> <span class="n">AssistantEventHandler</span><span class="p">,</span>
+    <span class="n">AsyncAssistantEventHandler</span> <span class="k">as</span> <span class="n">AsyncAssistantEventHandler</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">_setup_logging</span><span class="p">()</span>
+
+<span class="c1"># Update the __module__ attribute for exported symbols so that</span>
+<span class="c1"># error messages point to this module instead of the module</span>
+<span class="c1"># it was originally defined in, e.g.</span>
+<span class="c1"># openai._exceptions.NotFoundError -&gt; openai.NotFoundError</span>
+<span class="n">__locals</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">__name</span> <span class="ow">in</span> <span class="n">__all__</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">__name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">__locals</span><span class="p">[</span><span class="n">__name</span><span class="p">]</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="s2">&quot;openai&quot;</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="c1"># Some of our exported symbols are builtins which we can&#39;t set attributes for.</span>
+            <span class="k">pass</span>
+
+<span class="c1"># ------ Module level client ------</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_t</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_te</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_httpx</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">._base_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">,</span> <span class="n">DEFAULT_MAX_RETRIES</span>
+
+<span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">organization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">project</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">webhook_secret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">URL</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">DEFAULT_TIMEOUT</span>
+
+<span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_MAX_RETRIES</span>
+
+<span class="n">default_headers</span><span class="p">:</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">default_query</span><span class="p">:</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">http_client</span><span class="p">:</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">Client</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">_ApiType</span> <span class="o">=</span> <span class="n">_te</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;openai&quot;</span><span class="p">,</span> <span class="s2">&quot;azure&quot;</span><span class="p">]</span>
+
+<span class="n">api_type</span><span class="p">:</span> <span class="n">_ApiType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_t</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">_ApiType</span><span class="p">,</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_TYPE&quot;</span><span class="p">))</span>
+
+<span class="n">api_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_VERSION&quot;</span><span class="p">)</span>
+
+<span class="n">azure_endpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_ENDPOINT&quot;</span><span class="p">)</span>
+
+<span class="n">azure_ad_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_AD_TOKEN&quot;</span><span class="p">)</span>
+
+<span class="n">azure_ad_token_provider</span><span class="p">:</span> <span class="n">_azure</span><span class="o">.</span><span class="n">AzureADTokenProvider</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_ModuleClient</span><span class="p">(</span><span class="n">OpenAI</span><span class="p">):</span>
+    <span class="c1"># Note: we have to use type: ignores here as overriding class members</span>
+    <span class="c1"># with properties is technically unsafe but it is fine for our use case</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">api_key</span>
+
+    <span class="nd">@api_key</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">api_key</span>
+
+        <span class="n">api_key</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">organization</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">organization</span>
+
+    <span class="nd">@organization</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">organization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">organization</span>
+
+        <span class="n">organization</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">project</span>
+
+    <span class="nd">@project</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">project</span>
+
+        <span class="n">project</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">webhook_secret</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">webhook_secret</span>
+
+    <span class="nd">@webhook_secret</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">webhook_secret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">webhook_secret</span>
+
+        <span class="n">webhook_secret</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">base_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">URL</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">base_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">URL</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">base_url</span>
+
+    <span class="nd">@base_url</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">base_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">URL</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">url</span>  <span class="c1"># type: ignore[misc]</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">timeout</span>
+
+    <span class="nd">@timeout</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">timeout</span>
+
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max_retries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">max_retries</span>
+
+    <span class="nd">@max_retries</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max_retries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">max_retries</span>
+
+        <span class="n">max_retries</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default_headers</span>
+
+    <span class="nd">@_custom_headers</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">default_headers</span>
+
+        <span class="n">default_headers</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_query</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default_query</span>
+
+    <span class="nd">@_custom_query</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">_t</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">default_query</span>
+
+        <span class="n">default_query</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">http_client</span> <span class="ow">or</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_client</span>
+
+    <span class="nd">@_client</span><span class="o">.</span><span class="n">setter</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">_httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">global</span> <span class="n">http_client</span>
+
+        <span class="n">http_client</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_AzureModuleClient</span><span class="p">(</span><span class="n">_ModuleClient</span><span class="p">,</span> <span class="n">AzureOpenAI</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+    <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_AmbiguousModuleClientUsageError</span><span class="p">(</span><span class="n">OpenAIError</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="s2">&quot;Ambiguous use of module client; please set `openai.api_type` or the `OPENAI_API_TYPE` environment variable to `openai` or `azure`&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_openai_credentials</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_azure_credentials</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">azure_endpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_API_KEY&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_azure_ad_credentials</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_AD_TOKEN&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="n">azure_ad_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="n">azure_ad_token_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+
+<span class="n">_client</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_client</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">OpenAI</span><span class="p">:</span>  <span class="c1"># type: ignore[reportUnusedFunction]</span>
+    <span class="k">global</span> <span class="n">_client</span>
+
+    <span class="k">if</span> <span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">global</span> <span class="n">api_type</span><span class="p">,</span> <span class="n">azure_endpoint</span><span class="p">,</span> <span class="n">azure_ad_token</span><span class="p">,</span> <span class="n">api_version</span>
+
+        <span class="k">if</span> <span class="n">azure_endpoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">azure_endpoint</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_ENDPOINT&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">azure_ad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">azure_ad_token</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AZURE_OPENAI_AD_TOKEN&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">api_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">api_version</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_VERSION&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">api_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">has_openai</span> <span class="o">=</span> <span class="n">_has_openai_credentials</span><span class="p">()</span>
+            <span class="n">has_azure</span> <span class="o">=</span> <span class="n">_has_azure_credentials</span><span class="p">()</span>
+            <span class="n">has_azure_ad</span> <span class="o">=</span> <span class="n">_has_azure_ad_credentials</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">has_openai</span> <span class="ow">and</span> <span class="p">(</span><span class="n">has_azure</span> <span class="ow">or</span> <span class="n">has_azure_ad</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">_AmbiguousModuleClientUsageError</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">azure_ad_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">azure_ad_token_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;AZURE_OPENAI_API_KEY&quot;</span>
+            <span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">_AmbiguousModuleClientUsageError</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">has_azure</span> <span class="ow">or</span> <span class="n">has_azure_ad</span><span class="p">:</span>
+                <span class="n">api_type</span> <span class="o">=</span> <span class="s2">&quot;azure&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">api_type</span> <span class="o">=</span> <span class="s2">&quot;openai&quot;</span>
+
+        <span class="k">if</span> <span class="n">api_type</span> <span class="o">==</span> <span class="s2">&quot;azure&quot;</span><span class="p">:</span>
+            <span class="n">_client</span> <span class="o">=</span> <span class="n">_AzureModuleClient</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                <span class="n">api_version</span><span class="o">=</span><span class="n">api_version</span><span class="p">,</span>
+                <span class="n">azure_endpoint</span><span class="o">=</span><span class="n">azure_endpoint</span><span class="p">,</span>
+                <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+                <span class="n">azure_ad_token</span><span class="o">=</span><span class="n">azure_ad_token</span><span class="p">,</span>
+                <span class="n">azure_ad_token_provider</span><span class="o">=</span><span class="n">azure_ad_token_provider</span><span class="p">,</span>
+                <span class="n">organization</span><span class="o">=</span><span class="n">organization</span><span class="p">,</span>
+                <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
+                <span class="n">default_headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span>
+                <span class="n">default_query</span><span class="o">=</span><span class="n">default_query</span><span class="p">,</span>
+                <span class="n">http_client</span><span class="o">=</span><span class="n">http_client</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">_client</span>
+
+        <span class="n">_client</span> <span class="o">=</span> <span class="n">_ModuleClient</span><span class="p">(</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="n">organization</span><span class="o">=</span><span class="n">organization</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+            <span class="n">webhook_secret</span><span class="o">=</span><span class="n">webhook_secret</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
+            <span class="n">default_headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span>
+            <span class="n">default_query</span><span class="o">=</span><span class="n">default_query</span><span class="p">,</span>
+            <span class="n">http_client</span><span class="o">=</span><span class="n">http_client</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">_client</span>
+
+    <span class="k">return</span> <span class="n">_client</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reset_client</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[reportUnusedFunction]</span>
+    <span class="k">global</span> <span class="n">_client</span>
+
+    <span class="n">_client</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">._module_client</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">beta</span> <span class="k">as</span> <span class="n">beta</span><span class="p">,</span>
+    <span class="n">chat</span> <span class="k">as</span> <span class="n">chat</span><span class="p">,</span>
+    <span class="n">audio</span> <span class="k">as</span> <span class="n">audio</span><span class="p">,</span>
+    <span class="n">evals</span> <span class="k">as</span> <span class="n">evals</span><span class="p">,</span>
+    <span class="n">files</span> <span class="k">as</span> <span class="n">files</span><span class="p">,</span>
+    <span class="n">images</span> <span class="k">as</span> <span class="n">images</span><span class="p">,</span>
+    <span class="n">models</span> <span class="k">as</span> <span class="n">models</span><span class="p">,</span>
+    <span class="n">videos</span> <span class="k">as</span> <span class="n">videos</span><span class="p">,</span>
+    <span class="n">batches</span> <span class="k">as</span> <span class="n">batches</span><span class="p">,</span>
+    <span class="n">uploads</span> <span class="k">as</span> <span class="n">uploads</span><span class="p">,</span>
+    <span class="n">realtime</span> <span class="k">as</span> <span class="n">realtime</span><span class="p">,</span>
+    <span class="n">webhooks</span> <span class="k">as</span> <span class="n">webhooks</span><span class="p">,</span>
+    <span class="n">responses</span> <span class="k">as</span> <span class="n">responses</span><span class="p">,</span>
+    <span class="n">containers</span> <span class="k">as</span> <span class="n">containers</span><span class="p">,</span>
+    <span class="n">embeddings</span> <span class="k">as</span> <span class="n">embeddings</span><span class="p">,</span>
+    <span class="n">completions</span> <span class="k">as</span> <span class="n">completions</span><span class="p">,</span>
+    <span class="n">fine_tuning</span> <span class="k">as</span> <span class="n">fine_tuning</span><span class="p">,</span>
+    <span class="n">moderations</span> <span class="k">as</span> <span class="n">moderations</span><span class="p">,</span>
+    <span class="n">conversations</span> <span class="k">as</span> <span class="n">conversations</span><span class="p">,</span>
+    <span class="n">vector_stores</span> <span class="k">as</span> <span class="n">vector_stores</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2024, Jesús Díaz.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

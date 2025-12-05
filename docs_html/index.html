@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transcriptor de Audio - Documentación &mdash; Transcriptor de Audio v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=36c4ab74"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Transcriptor de Audio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Transcriptor de Audio - Documentación</a><ul>
+<li><a class="reference internal" href="#caracteristicas-principales">Características Principales</a></li>
+<li><a class="reference internal" href="#inicio-rapido">Inicio Rápido</a><ul>
+<li><a class="reference internal" href="#instalacion">Instalación</a></li>
+<li><a class="reference internal" href="#configuracion">Configuración</a></li>
+<li><a class="reference internal" href="#uso">Uso</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contenido">Contenido</a></li>
+<li><a class="reference internal" href="#module-transcriptor_gui">Documentación de la API</a><ul>
+<li><a class="reference internal" href="#modulo-de-transcripcion-de-audio-con-whisper-api">Módulo de Transcripción de Audio con Whisper API</a></li>
+<li><a class="reference internal" href="#transcriptor_gui.client"><code class="docutils literal notranslate"><span class="pre">client</span></code></a></li>
+<li><a class="reference internal" href="#transcriptor_gui.selected_file"><code class="docutils literal notranslate"><span class="pre">selected_file</span></code></a></li>
+<li><a class="reference internal" href="#transcriptor_gui.encrypt_text"><code class="docutils literal notranslate"><span class="pre">encrypt_text()</span></code></a></li>
+<li><a class="reference internal" href="#transcriptor_gui.seleccionar_archivo"><code class="docutils literal notranslate"><span class="pre">seleccionar_archivo()</span></code></a></li>
+<li><a class="reference internal" href="#transcriptor_gui.transcribir"><code class="docutils literal notranslate"><span class="pre">transcribir()</span></code></a></li>
+<li><a class="reference internal" href="#transcriptor_gui.encriptar"><code class="docutils literal notranslate"><span class="pre">encriptar()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#funciones-principales">Funciones Principales</a><ul>
+<li><a class="reference internal" href="#encriptacion">Encriptación</a><ul>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">encrypt_text()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#seleccion-de-archivo">Selección de Archivo</a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">seleccionar_archivo()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transcripcion">Transcripción</a><ul>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">transcribir()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#encriptar-texto">Encriptar Texto</a><ul>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">encriptar()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-y-tablas">Índices y Tablas</a></li>
+<li><a class="reference internal" href="#licencia">Licencia</a></li>
+<li><a class="reference internal" href="#autor">Autor</a></li>
+<li><a class="reference internal" href="#contacto">Contacto</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Transcriptor de Audio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Transcriptor de Audio - Documentación</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="transcriptor-de-audio-documentacion">
+<h1>Transcriptor de Audio - Documentación<a class="headerlink" href="#transcriptor-de-audio-documentacion" title="Link to this heading"></a></h1>
+<p>Bienvenido a la documentación del <strong>Transcriptor de Audio</strong>, una aplicación de escritorio
+para transcribir archivos de audio a texto usando la API de Whisper de OpenAI.</p>
+<img alt="Python Version" src="https://img.shields.io/badge/Python-3.7%2B-blue" />
+<img alt="License" src="https://img.shields.io/badge/License-MIT-green" />
+<section id="caracteristicas-principales">
+<h2>Características Principales<a class="headerlink" href="#caracteristicas-principales" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>🎵 <strong>Transcripción de audio</strong> usando Whisper API de OpenAI</p></li>
+<li><p>📄 <strong>Vista RAW</strong> del contenido binario del archivo</p></li>
+<li><p>🔐 <strong>Encriptación</strong> de texto con algoritmo Fernet (AES-128)</p></li>
+<li><p>🎨 <strong>Interfaz moderna</strong> con tema oscuro</p></li>
+<li><p>⚡ <strong>Procesamiento asíncrono</strong> sin bloquear la UI</p></li>
+</ul>
+</section>
+<section id="inicio-rapido">
+<h2>Inicio Rápido<a class="headerlink" href="#inicio-rapido" title="Link to this heading"></a></h2>
+<section id="instalacion">
+<h3>Instalación<a class="headerlink" href="#instalacion" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jesusdiazitla-lang/Transcriptor.git
+<span class="nb">cd</span><span class="w"> </span>Transcriptor
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="configuracion">
+<h3>Configuración<a class="headerlink" href="#configuracion" title="Link to this heading"></a></h3>
+<p>Crea un archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code> en la raíz del proyecto:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>tu_clave_api_aqui
+</pre></div>
+</div>
+</section>
+<section id="uso">
+<h3>Uso<a class="headerlink" href="#uso" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>transcriptor_gui.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="contenido">
+<h2>Contenido<a class="headerlink" href="#contenido" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="module-transcriptor_gui">
+<span id="documentacion-de-la-api"></span><h2>Documentación de la API<a class="headerlink" href="#module-transcriptor_gui" title="Link to this heading"></a></h2>
+<section id="modulo-de-transcripcion-de-audio-con-whisper-api">
+<h3>Módulo de Transcripción de Audio con Whisper API<a class="headerlink" href="#modulo-de-transcripcion-de-audio-con-whisper-api" title="Link to this heading"></a></h3>
+<p>Este módulo proporciona una interfaz gráfica (GUI) para transcribir archivos de audio
+a texto utilizando la API de Whisper de OpenAI. Incluye funcionalidades adicionales
+como visualización de datos RAW y encriptación de texto.</p>
+<dl class="simple">
+<dt>Características principales:</dt><dd><ul class="simple">
+<li><p>Transcripción de audio a texto con Whisper API</p></li>
+<li><p>Soporte para múltiples formatos de audio (MP3, WAV, M4A, OGG)</p></li>
+<li><p>Visualización automática de datos RAW del archivo de audio</p></li>
+<li><p>Encriptación de texto con Fernet (cryptography)</p></li>
+<li><p>Interfaz gráfica moderna con tema oscuro y 3 secciones</p></li>
+<li><p>Procesamiento asíncrono para no bloquear la UI</p></li>
+</ul>
+</dd>
+<dt>Requisitos:</dt><dd><ul class="simple">
+<li><p>Python 3.7+</p></li>
+<li><p>openai</p></li>
+<li><p>python-dotenv</p></li>
+<li><p>cryptography</p></li>
+<li><p>tkinter (incluido en Python)</p></li>
+</ul>
+</dd>
+<dt>Configuración:</dt><dd><p>Crear un archivo .env en el directorio raíz con:
+OPENAI_API_KEY=tu_clave_api_aqui</p>
+</dd>
+</dl>
+<p>Autor: Jesus Diaz
+Fecha: 12/04/2025
+Versión: 2.0.0</p>
+</section>
+<dl class="py data">
+<dt class="sig sig-object py" id="transcriptor_gui.client">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;openai.OpenAI</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#transcriptor_gui.client" title="Link to this definition"></a></dt>
+<dd><p>Cliente configurado para interactuar con la API de OpenAI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OpenAI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="transcriptor_gui.selected_file">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">selected_file</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#transcriptor_gui.selected_file" title="Link to this definition"></a></dt>
+<dd><p>Ruta del archivo de audio seleccionado actualmente. None si no hay archivo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="transcriptor_gui.encrypt_text">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">encrypt_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#encrypt_text"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#transcriptor_gui.encrypt_text" title="Link to this definition"></a></dt>
+<dd><p>Encripta un texto utilizando el algoritmo Fernet (AES-128).</p>
+<p>Esta función genera una clave de encriptación única cada vez que se ejecuta
+y utiliza esa clave para encriptar el texto proporcionado. La clave NO se
+devuelve ni se almacena, por lo que el texto encriptado no puede ser
+desencriptado posteriormente (encriptación de un solo uso).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – Texto plano que se desea encriptar.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Texto encriptado en formato base64 como string.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">texto_original</span> <span class="o">=</span> <span class="s2">&quot;Hola mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">texto_encriptado</span> <span class="o">=</span> <span class="n">encrypt_text</span><span class="p">(</span><span class="n">texto_original</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">texto_encriptado</span><span class="p">)</span>
+<span class="go">&#39;gAAAAABh...&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>La clave de encriptación se genera aleatoriamente y se descarta después
+de la encriptación, lo que hace imposible recuperar el texto original.
+Esto es por diseño de seguridad.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>No utilizar esta función para datos que necesiten ser desencriptados
+posteriormente, ya que la clave se pierde.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="transcriptor_gui.seleccionar_archivo">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">seleccionar_archivo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#seleccionar_archivo"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#transcriptor_gui.seleccionar_archivo" title="Link to this definition"></a></dt>
+<dd><p>Abre un diálogo para seleccionar un archivo de audio y muestra su contenido RAW.</p>
+<p>Permite al usuario seleccionar archivos con extensiones de audio comunes,
+actualiza la variable global selected_file con la ruta del archivo elegido
+y automáticamente carga y muestra el contenido RAW del archivo en el primer
+cuadro de texto.</p>
+<dl class="simple">
+<dt>Formatos soportados:</dt><dd><ul class="simple">
+<li><p>MP3 (.mp3)</p></li>
+<li><p>WAV (.wav)</p></li>
+<li><p>M4A (.m4a)</p></li>
+<li><p>OGG (.ogg)</p></li>
+</ul>
+</dd>
+<dt>Globals:</dt><dd><p>selected_file (str): Se actualiza con la ruta del archivo seleccionado.
+text_raw (tk.Text): Se actualiza con el contenido RAW del archivo.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Actualiza la variable global selected_file</p></li>
+<li><p>Lee el archivo del disco</p></li>
+<li><p>Muestra el contenido RAW en text_raw automáticamente</p></li>
+<li><p>Muestra un messagebox con la confirmación</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seleccionar_archivo</span><span class="p">()</span>
+<span class="go"># Abre diálogo de selección de archivo</span>
+<span class="go"># Si se selecciona: selected_file = &quot;/ruta/al/audio.mp3&quot;</span>
+<span class="go"># Y muestra el contenido RAW automáticamente</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="transcriptor_gui.transcribir">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">transcribir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#transcribir"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#transcriptor_gui.transcribir" title="Link to this definition"></a></dt>
+<dd><p>Transcribe el archivo de audio seleccionado a texto usando Whisper API.</p>
+<p>Esta función ejecuta la transcripción en un hilo separado para evitar
+bloquear la interfaz gráfica. Utiliza el modelo gpt-4o-transcribe de OpenAI
+para realizar la conversión de audio a texto y muestra el resultado en el
+cuadro de texto de transcripción.</p>
+<dl class="simple">
+<dt>Proceso:</dt><dd><ol class="arabic simple">
+<li><p>Valida que haya un archivo seleccionado</p></li>
+<li><p>Inicia la barra de progreso</p></li>
+<li><p>Envía el archivo a la API de Whisper</p></li>
+<li><p>Muestra el resultado en text_transcripcion</p></li>
+<li><p>Detiene la barra de progreso</p></li>
+</ol>
+</dd>
+<dt>Globals:</dt><dd><p>selected_file (str): Ruta del archivo de audio a transcribir.
+progress (ttk.Progressbar): Barra de progreso de la interfaz.
+text_transcripcion (tk.Text): Cuadro donde se muestra la transcripción.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>messagebox.showerror</strong> – Si no hay archivo seleccionado o si ocurre un error
+    durante la transcripción.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Lee el archivo de audio del disco</p></li>
+<li><p>Realiza una llamada a la API de OpenAI (consume créditos)</p></li>
+<li><p>Actualiza el contenido de text_transcripcion</p></li>
+<li><p>Inicia/detiene la barra de progreso</p></li>
+<li><p>Crea un hilo de ejecución separado</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transcribir</span><span class="p">()</span>
+<span class="go"># Después de procesar:</span>
+<span class="go"># text_transcripcion muestra: &quot;Este es el texto transcrito del audio...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>La transcripción se ejecuta de forma asíncrona</p></li>
+<li><p>Requiere conexión a internet</p></li>
+<li><p>El tiempo de procesamiento depende del tamaño del archivo</p></li>
+<li><p>Consume créditos de la API de OpenAI</p></li>
+</ul>
+</div>
+<dl class="simple">
+<dt>API Reference:</dt><dd><p>Utiliza: client.audio.transcriptions.create()
+Modelo: gpt-4o-transcribe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="transcriptor_gui.encriptar">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">encriptar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#encriptar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#transcriptor_gui.encriptar" title="Link to this definition"></a></dt>
+<dd><p>Encripta el contenido del cuadro de texto de transcripción.</p>
+<p>Toma el texto transcrito del cuadro text_transcripcion, lo encripta
+usando el algoritmo Fernet y muestra el resultado en el cuadro de
+texto de encriptación. La clave de encriptación NO se muestra ni se almacena.</p>
+<dl class="simple">
+<dt>Globals:</dt><dd><p>text_transcripcion (tk.Text): Cuadro con el texto a encriptar.
+text_encriptado (tk.Text): Cuadro donde se muestra el resultado.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>messagebox.showerror</strong> – Si el cuadro de transcripción está vacío.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Lee el contenido de text_transcripcion</p></li>
+<li><p>Actualiza text_encriptado con el texto encriptado</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># text_transcripcion contiene: &quot;Hola mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encriptar</span><span class="p">()</span>
+<span class="go"># text_encriptado ahora muestra: &quot;gAAAAABh...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>El texto encriptado NO puede ser desencriptado porque la clave
+se descarta inmediatamente después de la encriptación.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Ver también</p>
+<p>encrypt_text(): Función que realiza la encriptación real.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="funciones-principales">
+<h2>Funciones Principales<a class="headerlink" href="#funciones-principales" title="Link to this heading"></a></h2>
+<section id="encriptacion">
+<h3>Encriptación<a class="headerlink" href="#encriptacion" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">encrypt_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#encrypt_text"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Encripta un texto utilizando el algoritmo Fernet (AES-128).</p>
+<p>Esta función genera una clave de encriptación única cada vez que se ejecuta
+y utiliza esa clave para encriptar el texto proporcionado. La clave NO se
+devuelve ni se almacena, por lo que el texto encriptado no puede ser
+desencriptado posteriormente (encriptación de un solo uso).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – Texto plano que se desea encriptar.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Texto encriptado en formato base64 como string.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">texto_original</span> <span class="o">=</span> <span class="s2">&quot;Hola mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">texto_encriptado</span> <span class="o">=</span> <span class="n">encrypt_text</span><span class="p">(</span><span class="n">texto_original</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">texto_encriptado</span><span class="p">)</span>
+<span class="go">&#39;gAAAAABh...&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>La clave de encriptación se genera aleatoriamente y se descarta después
+de la encriptación, lo que hace imposible recuperar el texto original.
+Esto es por diseño de seguridad.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>No utilizar esta función para datos que necesiten ser desencriptados
+posteriormente, ya que la clave se pierde.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="seleccion-de-archivo">
+<h3>Selección de Archivo<a class="headerlink" href="#seleccion-de-archivo" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">seleccionar_archivo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#seleccionar_archivo"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Abre un diálogo para seleccionar un archivo de audio y muestra su contenido RAW.</p>
+<p>Permite al usuario seleccionar archivos con extensiones de audio comunes,
+actualiza la variable global selected_file con la ruta del archivo elegido
+y automáticamente carga y muestra el contenido RAW del archivo en el primer
+cuadro de texto.</p>
+<dl class="simple">
+<dt>Formatos soportados:</dt><dd><ul class="simple">
+<li><p>MP3 (.mp3)</p></li>
+<li><p>WAV (.wav)</p></li>
+<li><p>M4A (.m4a)</p></li>
+<li><p>OGG (.ogg)</p></li>
+</ul>
+</dd>
+<dt>Globals:</dt><dd><p>selected_file (str): Se actualiza con la ruta del archivo seleccionado.
+text_raw (tk.Text): Se actualiza con el contenido RAW del archivo.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Actualiza la variable global selected_file</p></li>
+<li><p>Lee el archivo del disco</p></li>
+<li><p>Muestra el contenido RAW en text_raw automáticamente</p></li>
+<li><p>Muestra un messagebox con la confirmación</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seleccionar_archivo</span><span class="p">()</span>
+<span class="go"># Abre diálogo de selección de archivo</span>
+<span class="go"># Si se selecciona: selected_file = &quot;/ruta/al/audio.mp3&quot;</span>
+<span class="go"># Y muestra el contenido RAW automáticamente</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="transcripcion">
+<h3>Transcripción<a class="headerlink" href="#transcripcion" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">transcribir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#transcribir"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Transcribe el archivo de audio seleccionado a texto usando Whisper API.</p>
+<p>Esta función ejecuta la transcripción en un hilo separado para evitar
+bloquear la interfaz gráfica. Utiliza el modelo gpt-4o-transcribe de OpenAI
+para realizar la conversión de audio a texto y muestra el resultado en el
+cuadro de texto de transcripción.</p>
+<dl class="simple">
+<dt>Proceso:</dt><dd><ol class="arabic simple">
+<li><p>Valida que haya un archivo seleccionado</p></li>
+<li><p>Inicia la barra de progreso</p></li>
+<li><p>Envía el archivo a la API de Whisper</p></li>
+<li><p>Muestra el resultado en text_transcripcion</p></li>
+<li><p>Detiene la barra de progreso</p></li>
+</ol>
+</dd>
+<dt>Globals:</dt><dd><p>selected_file (str): Ruta del archivo de audio a transcribir.
+progress (ttk.Progressbar): Barra de progreso de la interfaz.
+text_transcripcion (tk.Text): Cuadro donde se muestra la transcripción.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>messagebox.showerror</strong> – Si no hay archivo seleccionado o si ocurre un error
+    durante la transcripción.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Lee el archivo de audio del disco</p></li>
+<li><p>Realiza una llamada a la API de OpenAI (consume créditos)</p></li>
+<li><p>Actualiza el contenido de text_transcripcion</p></li>
+<li><p>Inicia/detiene la barra de progreso</p></li>
+<li><p>Crea un hilo de ejecución separado</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transcribir</span><span class="p">()</span>
+<span class="go"># Después de procesar:</span>
+<span class="go"># text_transcripcion muestra: &quot;Este es el texto transcrito del audio...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>La transcripción se ejecuta de forma asíncrona</p></li>
+<li><p>Requiere conexión a internet</p></li>
+<li><p>El tiempo de procesamiento depende del tamaño del archivo</p></li>
+<li><p>Consume créditos de la API de OpenAI</p></li>
+</ul>
+</div>
+<dl class="simple">
+<dt>API Reference:</dt><dd><p>Utiliza: client.audio.transcriptions.create()
+Modelo: gpt-4o-transcribe</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="encriptar-texto">
+<h3>Encriptar Texto<a class="headerlink" href="#encriptar-texto" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-prename descclassname"><span class="pre">transcriptor_gui.</span></span><span class="sig-name descname"><span class="pre">encriptar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/transcriptor_gui.html#encriptar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Encripta el contenido del cuadro de texto de transcripción.</p>
+<p>Toma el texto transcrito del cuadro text_transcripcion, lo encripta
+usando el algoritmo Fernet y muestra el resultado en el cuadro de
+texto de encriptación. La clave de encriptación NO se muestra ni se almacena.</p>
+<dl class="simple">
+<dt>Globals:</dt><dd><p>text_transcripcion (tk.Text): Cuadro con el texto a encriptar.
+text_encriptado (tk.Text): Cuadro donde se muestra el resultado.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>messagebox.showerror</strong> – Si el cuadro de transcripción está vacío.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Side Effects:</dt><dd><ul class="simple">
+<li><p>Lee el contenido de text_transcripcion</p></li>
+<li><p>Actualiza text_encriptado con el texto encriptado</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-ejemplo admonition">
+<p class="admonition-title">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># text_transcripcion contiene: &quot;Hola mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encriptar</span><span class="p">()</span>
+<span class="go"># text_encriptado ahora muestra: &quot;gAAAAABh...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>El texto encriptado NO puede ser desencriptado porque la clave
+se descarta inmediatamente después de la encriptación.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Ver también</p>
+<p>encrypt_text(): Función que realiza la encriptación real.</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="indices-y-tablas">
+<h2>Índices y Tablas<a class="headerlink" href="#indices-y-tablas" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Índice</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Índice de Módulos</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Página de Búsqueda</span></a></p></li>
+</ul>
+</section>
+<section id="licencia">
+<h2>Licencia<a class="headerlink" href="#licencia" title="Link to this heading"></a></h2>
+<p>Este proyecto está bajo la Licencia MIT. Ver el archivo LICENSE para más detalles.</p>
+</section>
+<section id="autor">
+<h2>Autor<a class="headerlink" href="#autor" title="Link to this heading"></a></h2>
+<p><strong>Jesús Díaz</strong></p>
+<ul class="simple">
+<li><p>GitHub: <a class="reference external" href="https://github.com/jesusdiazitla-lang">&#64;jesusdiazitla-lang</a></p></li>
+</ul>
+</section>
+<section id="contacto">
+<h2>Contacto<a class="headerlink" href="#contacto" title="Link to this heading"></a></h2>
+<p>Para reportar bugs o solicitar nuevas características, visita:
+<a class="reference external" href="https://github.com/jesusdiazitla-lang/Transcriptor/issues">https://github.com/jesusdiazitla-lang/Transcriptor/issues</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2024, Jesús Díaz.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

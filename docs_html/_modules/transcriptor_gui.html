@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>transcriptor_gui &mdash; Transcriptor de Audio v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=36c4ab74"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Transcriptor de Audio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transcriptor de Audio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">transcriptor_gui</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para transcriptor_gui</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Módulo de Transcripción de Audio con Whisper API</span>
+<span class="sd">=================================================</span>
+
+<span class="sd">Este módulo proporciona una interfaz gráfica (GUI) para transcribir archivos de audio</span>
+<span class="sd">a texto utilizando la API de Whisper de OpenAI. Incluye funcionalidades adicionales</span>
+<span class="sd">como visualización de datos RAW y encriptación de texto.</span>
+
+<span class="sd">Características principales:</span>
+<span class="sd">    - Transcripción de audio a texto con Whisper API</span>
+<span class="sd">    - Soporte para múltiples formatos de audio (MP3, WAV, M4A, OGG)</span>
+<span class="sd">    - Visualización automática de datos RAW del archivo de audio</span>
+<span class="sd">    - Encriptación de texto con Fernet (cryptography)</span>
+<span class="sd">    - Interfaz gráfica moderna con tema oscuro y 3 secciones</span>
+<span class="sd">    - Procesamiento asíncrono para no bloquear la UI</span>
+
+<span class="sd">Requisitos:</span>
+<span class="sd">    - Python 3.7+</span>
+<span class="sd">    - openai</span>
+<span class="sd">    - python-dotenv</span>
+<span class="sd">    - cryptography</span>
+<span class="sd">    - tkinter (incluido en Python)</span>
+
+<span class="sd">Configuración:</span>
+<span class="sd">    Crear un archivo .env en el directorio raíz con:</span>
+<span class="sd">    OPENAI_API_KEY=tu_clave_api_aqui</span>
+
+<span class="sd">Autor: Jesus Diaz</span>
+<span class="sd">Fecha: 12/04/2025</span>
+<span class="sd">Versión: 2.0.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttk</span><span class="p">,</span> <span class="n">filedialog</span><span class="p">,</span> <span class="n">messagebox</span><span class="p">,</span> <span class="n">scrolledtext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.fernet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fernet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   CARGAR API KEY DESDE .env</span>
+<span class="c1"># =============================</span>
+
+<span class="n">load_dotenv</span><span class="p">()</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">API_KEY</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No se encontró la API KEY en .env&quot;</span><span class="p">)</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">API_KEY</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;OpenAI: Cliente configurado para interactuar con la API de OpenAI.&quot;&quot;&quot;</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   VARIABLES GLOBALES</span>
+<span class="c1"># =============================</span>
+
+<span class="n">selected_file</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="sd">&quot;&quot;&quot;str: Ruta del archivo de audio seleccionado actualmente. None si no hay archivo.&quot;&quot;&quot;</span>
+
+
+<span class="c1"># =============================</span>
+<span class="c1">#   FUNCIÓN PARA ENCRIPTAR TEXTO</span>
+<span class="c1"># =============================</span>
+
+<div class="viewcode-block" id="encrypt_text">
+<a class="viewcode-back" href="../index.html#transcriptor_gui.encrypt_text">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">encrypt_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encripta un texto utilizando el algoritmo Fernet (AES-128).</span>
+<span class="sd">    </span>
+<span class="sd">    Esta función genera una clave de encriptación única cada vez que se ejecuta</span>
+<span class="sd">    y utiliza esa clave para encriptar el texto proporcionado. La clave NO se</span>
+<span class="sd">    devuelve ni se almacena, por lo que el texto encriptado no puede ser</span>
+<span class="sd">    desencriptado posteriormente (encriptación de un solo uso).</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        text (str): Texto plano que se desea encriptar.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Texto encriptado en formato base64 como string.</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; texto_original = &quot;Hola mundo&quot;</span>
+<span class="sd">        &gt;&gt;&gt; texto_encriptado = encrypt_text(texto_original)</span>
+<span class="sd">        &gt;&gt;&gt; print(texto_encriptado)</span>
+<span class="sd">        &#39;gAAAAABh...&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Note:</span>
+<span class="sd">        La clave de encriptación se genera aleatoriamente y se descarta después</span>
+<span class="sd">        de la encriptación, lo que hace imposible recuperar el texto original.</span>
+<span class="sd">        Esto es por diseño de seguridad.</span>
+<span class="sd">    </span>
+<span class="sd">    Warning:</span>
+<span class="sd">        No utilizar esta función para datos que necesiten ser desencriptados</span>
+<span class="sd">        posteriormente, ya que la clave se pierde.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">Fernet</span><span class="o">.</span><span class="n">generate_key</span><span class="p">()</span>  
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Fernet</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">encrypted</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># =============================</span>
+<span class="c1">#   FUNCIONES DE LA APLICACIÓN</span>
+<span class="c1"># =============================</span>
+
+<div class="viewcode-block" id="seleccionar_archivo">
+<a class="viewcode-back" href="../index.html#transcriptor_gui.seleccionar_archivo">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">seleccionar_archivo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abre un diálogo para seleccionar un archivo de audio y muestra su contenido RAW.</span>
+<span class="sd">    </span>
+<span class="sd">    Permite al usuario seleccionar archivos con extensiones de audio comunes,</span>
+<span class="sd">    actualiza la variable global selected_file con la ruta del archivo elegido</span>
+<span class="sd">    y automáticamente carga y muestra el contenido RAW del archivo en el primer</span>
+<span class="sd">    cuadro de texto.</span>
+<span class="sd">    </span>
+<span class="sd">    Formatos soportados:</span>
+<span class="sd">        - MP3 (.mp3)</span>
+<span class="sd">        - WAV (.wav)</span>
+<span class="sd">        - M4A (.m4a)</span>
+<span class="sd">        - OGG (.ogg)</span>
+<span class="sd">    </span>
+<span class="sd">    Globals:</span>
+<span class="sd">        selected_file (str): Se actualiza con la ruta del archivo seleccionado.</span>
+<span class="sd">        text_raw (tk.Text): Se actualiza con el contenido RAW del archivo.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    </span>
+<span class="sd">    Side Effects:</span>
+<span class="sd">        - Actualiza la variable global selected_file</span>
+<span class="sd">        - Lee el archivo del disco</span>
+<span class="sd">        - Muestra el contenido RAW en text_raw automáticamente</span>
+<span class="sd">        - Muestra un messagebox con la confirmación</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; seleccionar_archivo()</span>
+<span class="sd">        # Abre diálogo de selección de archivo</span>
+<span class="sd">        # Si se selecciona: selected_file = &quot;/ruta/al/audio.mp3&quot;</span>
+<span class="sd">        # Y muestra el contenido RAW automáticamente</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">selected_file</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">filedialog</span><span class="o">.</span><span class="n">askopenfilename</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Seleccionar audio&quot;</span><span class="p">,</span>
+        <span class="n">filetypes</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;Audio files&quot;</span><span class="p">,</span> <span class="s2">&quot;*.mp3 *.wav *.m4a *.ogg&quot;</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">selected_file</span> <span class="o">=</span> <span class="n">file</span>
+        
+        <span class="c1"># Cargar y mostrar RAW automáticamente</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">selected_file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        
+        <span class="c1"># Convertir bytes a string mostrando caracteres RAW (primeros 3000 bytes)</span>
+        <span class="n">raw_text</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[:</span><span class="mi">3000</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span>
+        
+        <span class="n">text_raw</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+        <span class="n">text_raw</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="n">raw_text</span><span class="p">)</span>
+        
+        <span class="n">messagebox</span><span class="o">.</span><span class="n">showinfo</span><span class="p">(</span><span class="s2">&quot;Archivo cargado&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Archivo cargado:</span><span class="se">\n</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Vista RAW mostrada arriba.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transcribir">
+<a class="viewcode-back" href="../index.html#transcriptor_gui.transcribir">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transcribir</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transcribe el archivo de audio seleccionado a texto usando Whisper API.</span>
+<span class="sd">    </span>
+<span class="sd">    Esta función ejecuta la transcripción en un hilo separado para evitar</span>
+<span class="sd">    bloquear la interfaz gráfica. Utiliza el modelo gpt-4o-transcribe de OpenAI</span>
+<span class="sd">    para realizar la conversión de audio a texto y muestra el resultado en el</span>
+<span class="sd">    cuadro de texto de transcripción.</span>
+<span class="sd">    </span>
+<span class="sd">    Proceso:</span>
+<span class="sd">        1. Valida que haya un archivo seleccionado</span>
+<span class="sd">        2. Inicia la barra de progreso</span>
+<span class="sd">        3. Envía el archivo a la API de Whisper</span>
+<span class="sd">        4. Muestra el resultado en text_transcripcion</span>
+<span class="sd">        5. Detiene la barra de progreso</span>
+<span class="sd">    </span>
+<span class="sd">    Globals:</span>
+<span class="sd">        selected_file (str): Ruta del archivo de audio a transcribir.</span>
+<span class="sd">        progress (ttk.Progressbar): Barra de progreso de la interfaz.</span>
+<span class="sd">        text_transcripcion (tk.Text): Cuadro donde se muestra la transcripción.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        messagebox.showerror: Si no hay archivo seleccionado o si ocurre un error</span>
+<span class="sd">                             durante la transcripción.</span>
+<span class="sd">    </span>
+<span class="sd">    Side Effects:</span>
+<span class="sd">        - Lee el archivo de audio del disco</span>
+<span class="sd">        - Realiza una llamada a la API de OpenAI (consume créditos)</span>
+<span class="sd">        - Actualiza el contenido de text_transcripcion</span>
+<span class="sd">        - Inicia/detiene la barra de progreso</span>
+<span class="sd">        - Crea un hilo de ejecución separado</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; transcribir()</span>
+<span class="sd">        # Después de procesar:</span>
+<span class="sd">        # text_transcripcion muestra: &quot;Este es el texto transcrito del audio...&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Note:</span>
+<span class="sd">        - La transcripción se ejecuta de forma asíncrona</span>
+<span class="sd">        - Requiere conexión a internet</span>
+<span class="sd">        - El tiempo de procesamiento depende del tamaño del archivo</span>
+<span class="sd">        - Consume créditos de la API de OpenAI</span>
+<span class="sd">    </span>
+<span class="sd">    API Reference:</span>
+<span class="sd">        Utiliza: client.audio.transcriptions.create()</span>
+<span class="sd">        Modelo: gpt-4o-transcribe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">selected_file</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">messagebox</span><span class="o">.</span><span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="s2">&quot;Seleccione un archivo de audio primero&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Función interna que ejecuta la transcripción en un hilo separado.</span>
+<span class="sd">        </span>
+<span class="sd">        Esta función se ejecuta en segundo plano para no bloquear la UI principal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">progress</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">selected_file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-transcribe&quot;</span><span class="p">,</span>
+                    <span class="n">file</span><span class="o">=</span><span class="n">audio</span>
+                <span class="p">)</span>
+
+            <span class="n">text_transcripcion</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">text_transcripcion</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">messagebox</span><span class="o">.</span><span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="n">progress</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">run</span><span class="p">)</span>
+    <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="encriptar">
+<a class="viewcode-back" href="../index.html#transcriptor_gui.encriptar">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">encriptar</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encripta el contenido del cuadro de texto de transcripción.</span>
+<span class="sd">    </span>
+<span class="sd">    Toma el texto transcrito del cuadro text_transcripcion, lo encripta</span>
+<span class="sd">    usando el algoritmo Fernet y muestra el resultado en el cuadro de</span>
+<span class="sd">    texto de encriptación. La clave de encriptación NO se muestra ni se almacena.</span>
+<span class="sd">    </span>
+<span class="sd">    Globals:</span>
+<span class="sd">        text_transcripcion (tk.Text): Cuadro con el texto a encriptar.</span>
+<span class="sd">        text_encriptado (tk.Text): Cuadro donde se muestra el resultado.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        messagebox.showerror: Si el cuadro de transcripción está vacío.</span>
+<span class="sd">    </span>
+<span class="sd">    Side Effects:</span>
+<span class="sd">        - Lee el contenido de text_transcripcion</span>
+<span class="sd">        - Actualiza text_encriptado con el texto encriptado</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; # text_transcripcion contiene: &quot;Hola mundo&quot;</span>
+<span class="sd">        &gt;&gt;&gt; encriptar()</span>
+<span class="sd">        # text_encriptado ahora muestra: &quot;gAAAAABh...&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Warning:</span>
+<span class="sd">        El texto encriptado NO puede ser desencriptado porque la clave</span>
+<span class="sd">        se descarta inmediatamente después de la encriptación.</span>
+<span class="sd">    </span>
+<span class="sd">    See Also:</span>
+<span class="sd">        encrypt_text(): Función que realiza la encriptación real.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">text_transcripcion</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">contenido</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">messagebox</span><span class="o">.</span><span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="s2">&quot;No hay texto transcrito para encriptar&quot;</span><span class="p">)</span>
+
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">encrypt_text</span><span class="p">(</span><span class="n">contenido</span><span class="p">)</span>
+
+    <span class="n">text_encriptado</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+    <span class="n">text_encriptado</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># =============================</span>
+<span class="c1">#   CONFIGURACIÓN DE LA GUI</span>
+<span class="c1"># =============================</span>
+
+<span class="c1"># Ventana principal</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="n">window</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Transcriptor de Audio - Whisper API&quot;</span><span class="p">)</span>
+
+<span class="c1"># Configuración de tamaño: 60% ancho x 80% alto de la pantalla</span>
+<span class="n">screen_w</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">winfo_screenwidth</span><span class="p">()</span>
+<span class="n">screen_h</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">winfo_screenheight</span><span class="p">()</span>
+
+<span class="n">window_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">)</span>
+<span class="n">window_h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">screen_h</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">window</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">window_w</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">window_h</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">window</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#121212&quot;</span><span class="p">)</span>  <span class="c1"># Tema oscuro</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   ESTILOS (TEMA OSCURO)</span>
+<span class="c1"># =============================</span>
+
+<span class="n">style</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Style</span><span class="p">()</span>
+<span class="n">style</span><span class="o">.</span><span class="n">theme_use</span><span class="p">(</span><span class="s2">&quot;clam&quot;</span><span class="p">)</span>
+
+<span class="c1"># Configuración de estilos para tema oscuro</span>
+<span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TFrame&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#1e1e1e&quot;</span><span class="p">)</span>
+<span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TLabel&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#1e1e1e&quot;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;Header.TLabel&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#1e1e1e&quot;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;#00d9ff&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">))</span>
+<span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TButton&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#2d2d2d&quot;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TProgressbar&quot;</span><span class="p">,</span> <span class="n">troughcolor</span><span class="o">=</span><span class="s2">&quot;#2d2d2d&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#007bff&quot;</span><span class="p">)</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   LAYOUT DE LA INTERFAZ</span>
+<span class="c1"># =============================</span>
+
+<span class="c1"># Frame principal con scroll</span>
+<span class="n">main_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+<span class="n">main_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Canvas para scroll</span>
+<span class="n">canvas</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Canvas</span><span class="p">(</span><span class="n">main_frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#1e1e1e&quot;</span><span class="p">,</span> <span class="n">highlightthickness</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">scrollbar</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Scrollbar</span><span class="p">(</span><span class="n">main_frame</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">yview</span><span class="p">)</span>
+<span class="n">scrollable_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
+
+<span class="n">scrollable_frame</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
+    <span class="s2">&quot;&lt;Configure&gt;&quot;</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">canvas</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">scrollregion</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">bbox</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="n">create_window</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">window</span><span class="o">=</span><span class="n">scrollable_frame</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;nw&quot;</span><span class="p">)</span>
+<span class="n">canvas</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">yscrollcommand</span><span class="o">=</span><span class="n">scrollbar</span><span class="o">.</span><span class="n">set</span><span class="p">)</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">scrollbar</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   TÍTULO PRINCIPAL</span>
+<span class="c1"># =============================</span>
+
+<span class="n">title</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">scrollable_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🎤 Transcriptor de Audio a Texto&quot;</span><span class="p">,</span>
+                  <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">),</span> <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;#00d9ff&quot;</span><span class="p">)</span>
+<span class="n">title</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   BOTÓN SELECCIONAR ARCHIVO</span>
+<span class="c1"># =============================</span>
+
+<span class="n">btn_seleccionar</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">scrollable_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;📂 Seleccionar Archivo de Audio&quot;</span><span class="p">,</span> 
+                              <span class="n">command</span><span class="o">=</span><span class="n">seleccionar_archivo</span><span class="p">)</span>
+<span class="n">btn_seleccionar</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   SECCIÓN 1: VISTA RAW</span>
+<span class="c1"># =============================</span>
+
+<span class="n">frame_raw</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">scrollable_frame</span><span class="p">)</span>
+<span class="n">frame_raw</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">label_raw</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame_raw</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;📄 VISTA RAW DEL ARCHIVO&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;Header.TLabel&quot;</span><span class="p">)</span>
+<span class="n">label_raw</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">text_raw</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">frame_raw</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="s2">&quot;word&quot;</span><span class="p">,</span>
+                   <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#181818&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;#00ff00&quot;</span><span class="p">,</span>
+                   <span class="n">insertbackground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                   <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Courier New&quot;</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">text_raw</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;tk.Text: Cuadro de texto que muestra el contenido RAW del archivo de audio.&quot;&quot;&quot;</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   SECCIÓN 2: TRANSCRIPCIÓN</span>
+<span class="c1"># =============================</span>
+
+<span class="n">frame_transcripcion</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">scrollable_frame</span><span class="p">)</span>
+<span class="n">frame_transcripcion</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">label_transcripcion</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame_transcripcion</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;✨ TRANSCRIPCIÓN&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;Header.TLabel&quot;</span><span class="p">)</span>
+<span class="n">label_transcripcion</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">btn_transcribir</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">frame_transcripcion</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🎯 Transcribir Audio&quot;</span><span class="p">,</span> 
+                              <span class="n">command</span><span class="o">=</span><span class="n">transcribir</span><span class="p">)</span>
+<span class="n">btn_transcribir</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Barra de progreso</span>
+<span class="n">progress</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Progressbar</span><span class="p">(</span><span class="n">frame_transcripcion</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;indeterminate&quot;</span><span class="p">)</span>
+<span class="n">progress</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;ttk.Progressbar: Barra de progreso que se activa durante la transcripción.&quot;&quot;&quot;</span>
+
+<span class="n">text_transcripcion</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">frame_transcripcion</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="s2">&quot;word&quot;</span><span class="p">,</span>
+                             <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#181818&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                             <span class="n">insertbackground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                             <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">text_transcripcion</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="sd">&quot;&quot;&quot;tk.Text: Cuadro de texto donde se muestra la transcripción del audio.&quot;&quot;&quot;</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   SECCIÓN 3: ENCRIPTACIÓN</span>
+<span class="c1"># =============================</span>
+
+<span class="n">frame_encriptado</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">scrollable_frame</span><span class="p">)</span>
+<span class="n">frame_encriptado</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">label_encriptado</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame_encriptado</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🔐 TEXTO ENCRIPTADO&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;Header.TLabel&quot;</span><span class="p">)</span>
+<span class="n">label_encriptado</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">btn_encriptar</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">frame_encriptado</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🔒 Encriptar Transcripción&quot;</span><span class="p">,</span> 
+                            <span class="n">command</span><span class="o">=</span><span class="n">encriptar</span><span class="p">)</span>
+<span class="n">btn_encriptar</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">text_encriptado</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">frame_encriptado</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="s2">&quot;word&quot;</span><span class="p">,</span>
+                          <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#181818&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;#ff6b6b&quot;</span><span class="p">,</span>
+                          <span class="n">insertbackground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                          <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Courier New&quot;</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">text_encriptado</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="sd">&quot;&quot;&quot;tk.Text: Cuadro de texto donde se muestra el texto encriptado.&quot;&quot;&quot;</span>
+
+<span class="c1"># Nota de seguridad</span>
+<span class="n">nota_encriptado</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame_encriptado</span><span class="p">,</span> 
+                            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;⚠️ La clave de encriptación NO se guarda (seguridad de un solo uso)&quot;</span><span class="p">,</span>
+                            <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;#ff9800&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Comic Sans MS&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">nota_encriptado</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># =============================</span>
+<span class="c1">#   INICIAR APLICACIÓN</span>
+<span class="c1"># =============================</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Punto de entrada principal de la aplicación.</span>
+<span class="sd">    </span>
+<span class="sd">    Inicia el bucle principal de eventos de tkinter, que mantiene</span>
+<span class="sd">    la ventana abierta y responde a las interacciones del usuario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2024, Jesús Díaz.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
